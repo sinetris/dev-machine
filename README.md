@@ -109,7 +109,3 @@ Finally, to completely wipe the virtual machine from the disk **destroying all i
 
 Please check the [Vagrant documentation](http://vagrantup.com/v1/docs/index.html) for more information on Vagrant.
 
-
-## Credits
-
-* [VirtualBox](https://www.virtualbox.org)
