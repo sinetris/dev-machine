@@ -8,6 +8,7 @@ Vagrant::Config.run do |config|
   config.vm.box       = 'precise64'
   config.vm.box_url   = 'http://files.vagrantup.com/precise64.box'
   config.vm.host_name = 'dev-machine'
+  config.vm.share_folder "v-data", "/vagrant", ".", owner: 'vagrant', group: 'vagrant'
   # config.vm.network :hostonly, "192.168.10.102"
 
   config.vm.forward_port 3000, 3000
