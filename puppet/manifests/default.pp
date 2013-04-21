@@ -54,6 +54,11 @@ package { 'nodejs':
   ensure => installed
 }
 
+# capybara-webkit dependencies.
+package { 'libqtwebkit-dev':
+  ensure => installed
+}
+
 # --- Ruby ---------------------------------------------------------------------
 
 exec { 'install_rvm':
