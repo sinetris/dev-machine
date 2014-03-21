@@ -49,21 +49,48 @@ package { ['libxml2', 'libxml2-dev', 'libxslt1-dev']:
   ensure => installed
 }
 
-# ExecJS runtime.
-package { 'nodejs':
-  ensure => installed
-}
-
 # capybara-webkit dependencies.
 package { 'libqtwebkit-dev':
   ensure => installed
+}
+
+# --- NodeJS -------------------------------------------------------------------
+
+# include nodejs
+
+# Set the PPA package
+apt::ppa { 'ppa:chris-lea/node.js':
+  before => Exec['apt-get update']
+}
+
+exec { 'apt-get update':
+  command => '/usr/bin/apt-get update'
+}
+
+# Specify your  linux version (from the above link)
+package { 'nodejs':
+  ensure => latest,
+  require => Exec["apt-get update"]
+}
+
+# Add additional Node packages
+package { 'grunt-cli':
+  ensure   => present,
+  provider => 'npm',
+  require => Package['nodejs']
+}
+
+package { 'express':
+  ensure   => present,
+  provider => 'npm',
+  require => Package['nodejs']
 }
 
 # --- Ruby ---------------------------------------------------------------------
 
 exec { 'install_rvm':
   command => "${as_vagrant} 'curl -L https://get.rvm.io | bash -s stable'",
-  creates => "${home}/.rvm",
+  creates => "${home}/.rvm/bin/rvm",
   require => Package['curl']
 }
 
@@ -72,8 +99,8 @@ exec { 'install_ruby':
   # interactive environment, in particular to display messages or ask questions.
   # The rvm executable is more suitable for automated installs.
   #
-  # Thanks to @mpapis for this tip.
-  command => "${as_vagrant} '${home}/.rvm/bin/rvm install 2.0.0 --latest-binary --autolibs=enabled && rvm --fuzzy alias create default 2.0.0'",
+  # use a ruby patch level known to have a binary
+  command => "${as_vagrant} '${home}/.rvm/bin/rvm install ruby-2.0.0-p353 --binary --autolibs=enabled && rvm alias create default 2.0'",
   creates => "${home}/.rvm/bin/ruby",
   require => Exec['install_rvm']
 }
@@ -111,8 +138,7 @@ class { 'redis': }
 
 # --- MongoDB ---------------------------------------------------------------------
 
-class { 'mongodb':
-  enable_10gen => true,
-  dbpath       => '/var/lib/mongodb',
-  logpath      => '/var/log/mongodb/mongodb.log',
-}
+class {'::mongodb::globals':
+  manage_package_repo => true,
+}->
+class {'::mongodb::server': }

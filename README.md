@@ -20,6 +20,8 @@ Building the virtual machine is this easy:
 
     host $ git clone https://github.com/sinetris/dev-machine.git
     host $ cd dev-machine
+    host $ git submodule init
+    host $ git submodule update
     host $ vagrant up
 
 That's it.

@@ -16,6 +16,7 @@ Vagrant.configure("2") do |config|
   # config.vm.network :hostonly, "192.168.10.102"
 
   config.vm.network "forwarded_port", guest: 3000, host: 3000
+  config.vm.network "forwarded_port", guest: 27017, host: 27017
 
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "puppet/manifests"
