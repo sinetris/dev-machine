@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This project automates the setup of a development environment for working on Ruby, MongoDB and Redis.
+This project automates the setup of a development environment for working on Ruby, MongoDB, Node.js and Redis.
 
 ### Note
 
@@ -56,6 +56,10 @@ Port 3000 in the host computer is forwarded to port 3000 in the virtual machine.
 * MongoDB
 
 * Redis
+
+* ImageMagick
+
+* Vim
 
 ## Recommended Workflow
 
