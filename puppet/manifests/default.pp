@@ -73,23 +73,23 @@ package { 'nodejs':
   require => Exec["apt-get update"]
 }
 
-# Add additional Node packages
-package { 'grunt-cli':
-  ensure   => present,
-  provider => 'npm',
-  require => Package['nodejs']
-}
+# # Add additional Node packages
+# package { 'grunt-cli':
+#   ensure   => present,
+#   provider => 'npm',
+#   require => Package['nodejs']
+# }
 
-package { 'express':
-  ensure   => present,
-  provider => 'npm',
-  require => Package['nodejs']
-}
+# package { 'express':
+#   ensure   => present,
+#   provider => 'npm',
+#   require => Package['nodejs']
+# }
 
 # --- Ruby ---------------------------------------------------------------------
 
 exec { 'install_rvm':
-  command => "${as_vagrant} 'curl -L https://get.rvm.io | bash -s stable'",
+  command => "${as_vagrant} 'curl -sSL https://get.rvm.io | bash -s stable'",
   creates => "${home}/.rvm/bin/rvm",
   require => Package['curl']
 }
@@ -100,7 +100,7 @@ exec { 'install_ruby':
   # The rvm executable is more suitable for automated installs.
   #
   # use a ruby patch level known to have a binary
-  command => "${as_vagrant} '${home}/.rvm/bin/rvm install ruby-2.0.0-p353 --binary --autolibs=enabled && rvm alias create default 2.0'",
+  command => "${as_vagrant} '${home}/.rvm/bin/rvm install ruby-2.1 --autolibs=enabled && rvm --default use 2.1'",
   creates => "${home}/.rvm/bin/ruby",
   require => Exec['install_rvm']
 }
@@ -142,3 +142,39 @@ class {'::mongodb::globals':
   manage_package_repo => true,
 }->
 class {'::mongodb::server': }
+
+# --- PHP -------------------------------------------------------------------------
+
+include php
+
+class { ['php::fpm', 'php::cli', 'php::extension::apc']:
+
+}
+
+### MYSQL ####
+
+mysql::grant { 'wordpress':
+  mysql_privileges => 'ALL',
+  mysql_password   => 'wordpress',
+  mysql_db         => 'wordpress',
+  mysql_user       => 'wordpress',
+  mysql_host       => 'localhost',
+}
+
+mysql::grant { 'wptests':
+  mysql_privileges => 'ALL',
+  mysql_password   => 'wptests',
+  mysql_db         => 'wptests',
+  mysql_user       => 'wptests',
+  mysql_host       => 'localhost',
+}
+
+package { 'phpmyadmin':
+  ensure  => present,
+  require => Package['nginx']
+}
+
+
+##### NGINX
+
+class { "nginx": }

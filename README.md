@@ -26,14 +26,14 @@ Building the virtual machine is this easy:
 
 That's it.
 
-If the base box is not present that command fetches it first. The setup itself takes about 3 minutes in my MacBook Air. After the installation has finished, you can access the virtual machine with
+If the base box is not present that command fetches it first. The setup itself takes about 5 minutes in my MacBook Pro. After the installation has finished, you can access the virtual machine with
 
     host $ vagrant ssh
-    Welcome to Ubuntu 12.04 LTS (GNU/Linux 3.2.0-23-generic-pae i686)
+    Welcome to Ubuntu 14.04 LTS (GNU/Linux 3.13.0-30-generic x86_64)
     ...
     vagrant@dev-machine:~$
 
-Port 3000 in the host computer is forwarded to port 3000 in the virtual machine. Thus, applications running in the virtual machine can be accessed via localhost:3000 in the host computer.
+Port 3000 in the host computer is forwarded to port 3000 in the virtual machine. Thus, applications running in the virtual machine can be accessed via http://localhost:3000 in the host computer.
 
 ## What's In The Box
 
@@ -41,7 +41,7 @@ Port 3000 in the host computer is forwarded to port 3000 in the virtual machine.
 
 * RVM
 
-* Ruby 2.0.0 (binary RVM install)
+* Ruby 2.1
 
 * Bundler
 
@@ -61,6 +61,12 @@ Port 3000 in the host computer is forwarded to port 3000 in the virtual machine.
 
 * Vim
 
+* MySQL
+
+* PHP
+
+* nginx
+
 ## Recommended Workflow
 
 The recommended workflow is
@@ -76,7 +82,7 @@ Just clone your repo in the projects directory of the development box in the hos
     host $ cd projects
     host $ git clone git@github.com:<your username>/<you repo name>.git
 
-Vagrant mounts that very directory as _/vagrant_ within the virtual machine:
+Vagrant mounts that very directory as `/vagrant` within the virtual machine:
 
     vagrant@dev-machine:~$ ls /vagrant
     puppet  projects  README.md  Vagrantfile
@@ -114,4 +120,3 @@ Finally, to completely wipe the virtual machine from the disk **destroying all i
     host $ vagrant destroy # DANGER: all is gone
 
 Please check the [Vagrant documentation](http://docs.vagrantup.com/v2/) for more information on Vagrant.
-
